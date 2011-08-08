@@ -19,11 +19,12 @@
         if(theadContainer != null)
         {
             var theadPos = $(window).scrollTop();
+            var minTheadPos = floatingThead.offset().top + theadContainer.innerHeight() - theadContainer.outerHeight(true);
             // thead is in its original position
-            if(theadPos < floatingThead.offset().top)
+            if(theadPos < minTheadPos)
                 theadContainer.stop().animate(
                     {
-                        "top": floatingThead.offset().top
+                        "top": minTheadPos
                     }, theadAnimationSpeed);
             // thead is in the top of the window
             else
@@ -36,12 +37,13 @@
         // Move tfoot to new scrolling position
         if(tfootContainer != null)
         {
-            var tfootPos = $(window).scrollTop() + $(window).height() - tfootContainer.outerHeight(true);
+        	var tfootPos = $(window).scrollTop() + $(window).height() - tfootContainer.outerHeight(true);
+            var maxTfootPos = floatingTfoot.offset().top;
             // tfoot is in its original position
-            if(tfootPos > floatingTfoot.offset().top)
+            if(tfootPos > maxTfootPos)
                 tfootContainer.stop().animate(
                     {
-                        "top": floatingTfoot.offset().top
+                        "top": maxTfootPos
                     }, tfootAnimationSpeed);
             // tfoot is in the bottom of the window
             else
@@ -71,7 +73,7 @@
             }
             
             // Set cloned table width
-            clonedTheadParentTable.width(theadParentTable.width());
+            clonedTheadParentTable.width(theadParentTable.outerWidth());
             
             // Set cloned table head cells width
             clonedTheadColumns.each( function(index) {
@@ -98,7 +100,7 @@
             }
             
             // Set cloned table width
-            clonedTfootParentTable.width(tfootParentTable.width());
+            clonedTfootParentTable.width(tfootParentTable.outerWidth());
             
             // Set cloned table foot cells width
             clonedTfootColumns.each( function(index) {
@@ -112,7 +114,7 @@
 	$.fn.floatingHeadFoot = function(params) {
         
         // Setting up default parameters
-		var params = $.extend( {
+		var localParams = $.extend( {
 			speed: 500, // animation speed
             expand: false,
 			appendTo: $("body"),
@@ -150,16 +152,20 @@
                     theadContainer.remove();
                 
                 // Store animation speed parameter
-                theadAnimationSpeed = params.speed;
+                theadAnimationSpeed = localParams.speed;
                 // Store expand parameter
-                expandTheadContainer = params.expand;
+                expandTheadContainer = localParams.expand;
 
                 // Create #floating_head_container div
                 theadContainer = $("<div>")
                     .attr("id", "floating_head_container")
                     .css("position", "absolute")
+            		.css("padding-left", 0)
+            		.css("padding-right", 0)
+            		.css("border-left", 0)
+            		.css("border-right", 0)
                     .css("top", floatingThead.offset().top);
-                theadContainer.appendTo(params.appendTo);
+                theadContainer.appendTo(localParams.appendTo);
                         
                 // Get parent table of thead
                 theadParentTable = floatingThead.parent("table");
@@ -174,11 +180,17 @@
                 theadContainer.append(
                     $("<div>")
                         .css("margin-left", theadParentTable.offset().left - theadContainer.offset().left)
-                        .append(clonedTheadParentTable)
+                        .append(clonedTheadParentTable
+                        		.css("padding-top", 0)
+                        		.css("padding-bottom", 0)
+                        		.css("border-top", 0)
+                        		.css("border-bottom", 0)
+                        		.css("margin", 0)
+                        )
                     );
                 
                 // Hide original thead
-                floatingThead.css("visibility", "hidden")
+                floatingThead.css("visibility", "hidden");
             }
             
             // If new floating tfoot has been defined
@@ -189,16 +201,20 @@
                     tfootContainer.remove();
                 
                 // Store animation speed parameter
-                tfootAnimationSpeed = params.speed;
+                tfootAnimationSpeed = localParams.speed;
                 // Store expand parameter
-                expandTfootContainer = params.expand;
+                expandTfootContainer = localParams.expand;
 
                 // Create #floating_foot_container div
                 tfootContainer = $("<div>")
                     .attr("id", "floating_foot_container")
                     .css("position", "absolute")
+                    .css("padding-left", 0)
+                    .css("padding-right", 0)
+            		.css("border-left", 0)
+            		.css("border-right", 0)
                     .css("top", floatingTfoot.offset().top);
-                tfootContainer.appendTo(params.appendTo);
+                tfootContainer.appendTo(localParams.appendTo);
                         
                 // Get parent table of tfoot
                 tfootParentTable = floatingTfoot.parent("table");
@@ -213,11 +229,17 @@
                 tfootContainer.append(
                     $("<div>")
                         .css("margin-left", tfootParentTable.offset().left - tfootContainer.offset().left)
-                        .append(clonedTfootParentTable)
+                        .append(clonedTfootParentTable
+                        		.css("padding-top", 0)
+                        		.css("padding-bottom", 0)
+                        		.css("border-top", 0)
+                        		.css("border-bottom", 0)
+                        		.css("margin", 0)
+                   		)
                     );
                 
                 // Hide original tfoot
-                floatingTfoot.css("visibility", "hidden")
+                floatingTfoot.css("visibility", "hidden");
             }
             
             // Resize new floating thead/tfoot columns
@@ -233,8 +255,8 @@
                 moveHeadFoot();
                 
                 // User callback
-                if (typeof params.windowScrollCallback == "function") {
-                    params.windowScrollCallback.call(this);
+                if (typeof localParams.windowScrollCallback == "function") {
+                	localParams.windowScrollCallback.call(this);
                 }
             });
             
@@ -248,11 +270,11 @@
                 moveHeadFoot();
                 
                 // User callback
-                if (typeof params.windowResizeCallback == "function") {
-                    params.windowResizeCallback.call(this);
+                if (typeof localParams.windowResizeCallback == "function") {
+                	localParams.windowResizeCallback.call(this);
                 }
             });            
         }
 	};
     
-})(jQuery)
+})(jQuery);
