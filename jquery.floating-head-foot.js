@@ -22,8 +22,8 @@
     {
         return $("<div>").attr("id", id).css("position", "absolute").css(
             "padding-left", 0).css("padding-right", 0).css("border-left", 0)
-            .css("border-right", 0).css(
-                "margin-left", 0).css("margin-right", 0).css("top", topPosition).css("left",
+            .css("border-right", 0).css("margin-left", 0)
+            .css("margin-right", 0).css("top", topPosition).css("left",
                 leftPosition);
     }
 
