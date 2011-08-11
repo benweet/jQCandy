@@ -161,7 +161,6 @@
         // Setting up default parameters
         var localParams = $.extend(
         {
-            speed : 500, // animation speed
             fitWith : null, // container alignment and width
             windowScrollCallback : function()
             {
