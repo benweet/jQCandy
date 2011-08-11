@@ -1,46 +1,21 @@
 (function(
     $)
 {
-
-    var floatingThead = null;
-    var floatingTfoot = null;
-    var theadContainer = null;
-    var tfootContainer = null;
-    var theadFitWith = null;
-    var tfootFitWith = null;
-    var theadParentTable = null;
-    var tfootParentTable = null;
-    var clonedTheadParentTable = null;
-    var clonedTfootParentTable = null;
-    var theadAnimationSpeed = 0;
-    var tfootAnimationSpeed = 0;
+    var floatingList = [];
 
     function createContainer(
-        id,
-        topPosition,
-        leftPosition)
+        class)
     {
-        return $("<div>").attr("id", id).css("position", "absolute").css(
-            "padding-left", 0).css("padding-right", 0).css("border-left", 0)
-            .css("border-right", 0).css("margin-left", 0)
-            .css("margin-right", 0).css("top", topPosition).css("left",
-                leftPosition);
-    }
-
-    function animateContainer(
-        container,
-        topPosition,
-        leftPosition,
-        speed)
-    {
-        container.stop().css("left", leftPosition);
-        if (speed == 0)
-            container.css("top", topPosition);
-        else
-            container.animate(
-            {
-                "top" : topPosition
-            }, speed);
+        return $("<div>").addClass(class).css(
+        {
+            "position" : "absolute",
+            "padding-left" : 0,
+            "padding-right" : 0,
+            "border-left" : 0,
+            "border-right" : 0,
+            "margin-left" : 0,
+            "margin-right" : 0
+        });
     }
 
     function cloneTable(
@@ -54,109 +29,127 @@
         // Remove all duplicated ids in cloned table
         result.find("*").andSelf().removeAttr('id');
         // Remove unwanted css properties
-        result.css("padding-top", 0).css("padding-bottom", 0).css("border-top",
-            0).css("border-bottom", 0).css("margin", 0);
+        result.css(
+        {
+            "padding-top" : 0,
+            "padding-bottom" : 0,
+            "border-top" : 0,
+            "border-bottom" : 0,
+            "margin" : 0
+        });
         return result;
     }
 
-    function setClonedTableMarginLeft(
-        clonedTable,
-        originalTable,
-        container)
-    {
-        clonedTable.css("margin-left", originalTable.offset().left
-            - container.offset().left);
-    }
-
+    // Move thead/tfoot to the new scrolling position
     function moveHeadFoot()
     {
-        // Move thead to new scrolling position
-        if (theadContainer != null)
+        for ( var i in floatingList)
         {
-            var theadPos = $(window).scrollTop();
-            var minTheadPos = floatingThead.offset().top
-                + floatingThead.outerHeight()
-                - theadContainer.outerHeight(true);
-            // thead is in its original position
-            if (theadPos < minTheadPos)
-                animateContainer(theadContainer, minTheadPos, theadFitWith
-                    .offset().left, theadAnimationSpeed);
-            // thead is in the top of the window
+            var floating = floatingList[i];
+            var tLimitPos = 0;
+            var moveToLimit = false;
+            var cssProperties =
+            {
+                top : "",
+                bottom : ""
+            };
+
+            if (floating.t[0].tagName == "THEAD")
+            {
+                var tPos = $(window).scrollTop();
+                tLimitPos = floating.t.offset().top + floating.t.outerHeight()
+                    - floating.container.outerHeight(true);
+                // thead is in its original position
+                if (tPos < tLimitPos)
+                    moveToLimit = true;
+                else
+                {
+                    tLimitPos = floating.parent.offset().top
+                        + floating.parent.outerHeight()
+                        - floating.container.outerHeight(true);
+                    if (tPos > tLimitPos)
+                        moveToLimit = true;
+                    else
+                        cssProperties["top"] = 0;
+                }
+            }
+            else if (floating.t[0].tagName == "TFOOT")
+            {
+                var tPos = $(window).scrollTop() + $(window).height()
+                    - floating.container.outerHeight(true);
+                tLimitPos = floating.t.offset().top;
+                // tfoot is in its original position
+                if (tPos > tLimitPos)
+                    moveToLimit = true;
+                else
+                {
+                    tLimitPos = floating.parent.offset().top;
+                    if (tPos < tLimitPos)
+                        moveToLimit = true;
+                    else
+                        cssProperties["bottom"] = 0;
+                }
+            }
+            // thead/tfoot is in its original position
+            if (moveToLimit)
+            {
+                if (floating.position != "absolute")
+                {
+                    floating.container.css($.extend(cssProperties,
+                    {
+                        position : "absolute",
+                    }));
+                    floating.position = "absolute";
+                }
+                floating.container.css("top", tLimitPos);
+            }
+            // thead/tfoot is in the top/bottom of the window
             else
-                animateContainer(theadContainer, theadPos, theadFitWith
-                    .offset().left, theadAnimationSpeed);
+            {
+                if (floating.position != "fixed")
+                {
+                    floating.container.css($.extend(cssProperties,
+                    {
+                        position : "fixed"
+                    }));
+                    floating.position = "fixed";
+                }
+            }
 
-            // Move thead horizontally
-            setClonedTableMarginLeft(clonedTheadParentTable, theadParentTable,
-                theadContainer);
-        }
+            // Move container horizontally
+            floating.container.css("left", floating.fitWith.offset().left
+                - $(window).scrollLeft());
 
-        // Move tfoot to new scrolling position
-        if (tfootContainer != null)
-        {
-            var tfootPos = $(window).scrollTop() + $(window).height()
-                - tfootContainer.outerHeight(true);
-            var maxTfootPos = floatingTfoot.offset().top;
-            // tfoot is in its original position
-            if (tfootPos > maxTfootPos)
-                animateContainer(tfootContainer, maxTfootPos, tfootFitWith
-                    .offset().left, tfootAnimationSpeed);
-            // tfoot is in the bottom of the window
-            else
-                animateContainer(tfootContainer, tfootPos, tfootFitWith
-                    .offset().left, tfootAnimationSpeed);
-
-            // Move tfoot horizontally
-            setClonedTableMarginLeft(clonedTfootParentTable, tfootParentTable,
-                tfootContainer);
+            // Move parent table horizontally
+            floating.clonedParent.css("margin-left",
+                floating.parent.offset().left
+                    - floating.container.offset().left);
         }
     }
 
+    // Resize thead/tfoot
     function resizeHeadFoot()
     {
-        // Resize thead
-        if (theadContainer != null)
+        for ( var i in floatingList)
         {
-            var theadColumns = floatingThead.children().children("th,td");
-            var clonedThead = clonedTheadParentTable.children("thead");
-            var clonedTheadColumns = clonedThead.children().children("th,td");
+            var floating = floatingList[i];
+            var tColumns = floating.t.children().children("th,td");
+            var tClonedColumns = floating.clonedParent.children().children()
+                .children("th,td");
 
             // Expand container div
-            theadContainer.width(theadFitWith.outerWidth());
+            floating.container.width(floating.fitWith.outerWidth());
 
             // Set cloned table width
-            clonedTheadParentTable.width(theadParentTable.outerWidth());
+            floating.clonedParent.width(floating.parent.outerWidth());
 
             // Set cloned table head cells width
-            clonedTheadColumns.each(function(
+            tClonedColumns.each(function(
                 index)
             {
-                var clonedTheadColumn = $(this);
-                var theadColumn = theadColumns.eq(index);
-                clonedTheadColumn.width(theadColumn.width());
-            });
-        }
-
-        // Resize tfoot
-        if (tfootContainer != null)
-        {
-            var tfootColumns = floatingTfoot.children().children("th,td");
-            var clonedTfoot = clonedTfootParentTable.children("tfoot");
-            var clonedTfootColumns = clonedTfoot.children().children("th,td");
-
-            // Expand container div
-            tfootContainer.width(tfootFitWith.outerWidth());
-
-            // Set cloned table width
-            clonedTfootParentTable.width(tfootParentTable.outerWidth());
-
-            // Set cloned table foot cells width
-            clonedTfootColumns.each(function(
-                index)
-            {
-                var clonedTfootColumn = $(this);
-                var tfootColumn = tfootColumns.eq(index);
-                clonedTfootColumn.width(tfootColumn.width());
+                var tClonedColumn = $(this);
+                var theadColumn = tColumns.eq(index);
+                tClonedColumn.width(theadColumn.width());
             });
         }
     }
@@ -178,97 +171,59 @@
             }
         }, params);
 
-        var refreshTfoot = false;
-        var refreshThead = false;
         this.each(function()
         {
-
-            // Define new floating thead
-            if ($(this).is("thead"))
+            // Define new floating thead/tfoot
+            if ($(this).is("thead") || $(this).is("tfoot"))
             {
-                refreshThead = true;
-                floatingThead = $(this);
-            }
-
-            // Define new floating tfoot
-            else if ($(this).is("tfoot"))
-            {
-                refreshTfoot = true;
-                floatingTfoot = $(this);
+                floatingList.push(
+                {
+                    refresh : true,
+                    t : $(this)
+                });
             }
         });
 
-        // If new floating thead/tfoot has been defined
-        if (refreshTfoot || refreshThead)
+        var refresh = false;
+        // Search for new floating thead/tfoot
+        for ( var i in floatingList)
         {
-            // If new floating thead has been defined
-            if (refreshThead)
+            var floating = floatingList[i];
+
+            // If new floating thead/tfoot
+            if (floating.refresh)
             {
-                // Remove old #floating_head_container div
-                if (theadContainer != null)
-                    theadContainer.remove();
+                refresh = true;
+                floating.refresh = false;
 
-                // Store animation speed parameter
-                theadAnimationSpeed = localParams.speed;
-                // Store parent of #floating_head_container div
-                theadFitWith = floatingThead;
-                if (localParams.fitWith != null)
-                    theadFitWith = localParams.fitWith;
-
-                // Create #floating_head_container div
-                theadContainer = createContainer("floating_head_container",
-                    floatingThead.offset().top, theadFitWith.offset().left);
-                theadContainer.appendTo($("body"));
-
-                // Get parent table of thead
-                theadParentTable = floatingThead.parent("table");
-
-                // Create a copy of the thead parent table
-                clonedTheadParentTable = cloneTable(theadParentTable, "thead");
-                // Align cloned table horizontally
-                setClonedTableMarginLeft(clonedTheadParentTable,
-                    theadParentTable, theadContainer);
-                // Append cloned table to #floating_head_container
-                theadContainer.append(clonedTheadParentTable);
-
-                // Hide original thead
-                floatingThead.css("visibility", "hidden");
-            }
-
-            // If new floating tfoot has been defined
-            if (refreshTfoot)
-            {
-                // Remove old #floating_foot_container div
-                if (tfootContainer != null)
-                    tfootContainer.remove();
-
-                // Store animation speed parameter
-                tfootAnimationSpeed = localParams.speed;
                 // Store fitWith parameter
-                tfootFitWith = floatingTfoot;
+                floating.fitWith = floating.t;
                 if (localParams.fitWith != null)
-                    tfootFitWith = localParams.fitWith;
+                    floating.fitWith = localParams.fitWith;
+                // Set state
+                floating.position = "init";
 
-                // Create #floating_foot_container div
-                tfootContainer = createContainer("floating_foot_container",
-                    floatingTfoot.offset().top, tfootFitWith.offset().left);
-                tfootContainer.appendTo($("body"));
+                // Create a container
+                floating.container = createContainer("floating_"
+                    + floating.t[0].tagName.toLowerCase() + "_container");
+                floating.container.appendTo($("body"));
 
-                // Get parent table of tfoot
-                tfootParentTable = floatingTfoot.parent("table");
+                // Get parent table
+                floating.parent = floating.t.parent("table");
 
-                // Create a copy of the tfoot parent table
-                clonedTfootParentTable = cloneTable(tfootParentTable, "tfoot");
-                // Align cloned table horizontally
-                setClonedTableMarginLeft(clonedTfootParentTable,
-                    tfootParentTable, tfootContainer);
-                // Append cloned table to #floating_foot_container
-                tfootContainer.append(clonedTfootParentTable);
+                // Create a copy of the parent table
+                floating.clonedParent = cloneTable(floating.parent,
+                    floating.t[0].tagName);
+                // Append cloned table to container
+                floating.container.append(floating.clonedParent);
 
-                // Hide original tfoot
-                floatingTfoot.css("visibility", "hidden");
+                // Hide original thead/tfoot
+                floating.t.css("visibility", "hidden");
             }
+        }
 
+        if (refresh)
+        {
             // Resize new floating thead/tfoot columns
             resizeHeadFoot();
 
