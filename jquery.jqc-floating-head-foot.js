@@ -4,11 +4,10 @@
     var floatingList = [];
 
     function createContainer(
-        class)
+        className)
     {
-        return $("<div>").addClass(class).css(
+        return $("<div>").addClass(className).css(
         {
-            "position" : "absolute",
             "padding-left" : 0,
             "padding-right" : 0,
             "border-left" : 0,
@@ -58,7 +57,7 @@
             {
                 var tPos = $(window).scrollTop();
                 tLimitPos = floating.t.offset().top + floating.t.outerHeight()
-                    - floating.container.outerHeight(true);
+                    - floating.div.outerHeight(true);
                 // thead is in its original position
                 if (tPos < tLimitPos)
                     moveToLimit = true;
@@ -66,7 +65,7 @@
                 {
                     tLimitPos = floating.parent.offset().top
                         + floating.parent.outerHeight()
-                        - floating.container.outerHeight(true);
+                        - floating.div.outerHeight(true);
                     if (tPos > tLimitPos)
                         moveToLimit = true;
                     else
@@ -76,7 +75,7 @@
             else if (floating.t[0].tagName == "TFOOT")
             {
                 var tPos = $(window).scrollTop() + $(window).height()
-                    - floating.container.outerHeight(true);
+                    - floating.div.outerHeight(true);
                 tLimitPos = floating.t.offset().top;
                 // tfoot is in its original position
                 if (tPos > tLimitPos)
@@ -95,20 +94,20 @@
             {
                 if (floating.position != "absolute")
                 {
-                    floating.container.css($.extend(cssProperties,
+                    floating.div.css($.extend(cssProperties,
                     {
                         position : "absolute",
                     }));
                     floating.position = "absolute";
                 }
-                floating.container.css("top", tLimitPos);
+                floating.div.css("top", tLimitPos);
             }
             // thead/tfoot is in the top/bottom of the window
             else
             {
                 if (floating.position != "fixed")
                 {
-                    floating.container.css($.extend(cssProperties,
+                    floating.div.css($.extend(cssProperties,
                     {
                         position : "fixed"
                     }));
@@ -117,13 +116,8 @@
             }
 
             // Move container horizontally
-            floating.container.css("left", floating.fitWith.offset().left
-                - $(window).scrollLeft());
-
-            // Move parent table horizontally
-            floating.clonedParent.css("margin-left",
-                floating.parent.offset().left
-                    - floating.container.offset().left);
+            floating.container.css("margin-left",
+                floating.fitWith.offset().left - floating.div.offset().left);
         }
     }
 
@@ -151,6 +145,11 @@
                 var theadColumn = tColumns.eq(index);
                 tClonedColumn.width(theadColumn.width());
             });
+
+            // Move parent table horizontally
+            floating.clonedParent.css("margin-left",
+                floating.parent.offset().left
+                    - floating.container.offset().left);
         }
     }
 
@@ -202,10 +201,13 @@
                 // Set state
                 floating.position = "init";
 
-                // Create a container
-                floating.container = createContainer("floating_"
-                    + floating.t[0].tagName.toLowerCase() + "_container");
-                floating.container.appendTo($("body"));
+                // Create a div at the end of body
+                floating.div = $("<div>").appendTo($("body"));
+                // Create the container
+                floating.container = createContainer(
+                    "floating_" + floating.t[0].tagName.toLowerCase()
+                        + "_container").appendTo(floating.div);
+                ;
 
                 // Get parent table
                 floating.parent = floating.t.parent("table");
