@@ -2,18 +2,19 @@
     $)
 {
     var floatingList = [];
+    var fixedPosition = true;
 
     function createContainer(
         className)
     {
         return $("<div>").addClass(className).css(
         {
-            "padding-left" : 0,
-            "padding-right" : 0,
-            "border-left" : 0,
-            "border-right" : 0,
-            "margin-left" : 0,
-            "margin-right" : 0
+            paddingLeft : 0,
+            paddingRight : 0,
+            borderLeft : 0,
+            borderRight : 0,
+            marginLeft : 0,
+            marginRight : 0
         });
     }
 
@@ -25,17 +26,20 @@
         var result = table.clone();
         // Keep only keepTag
         result.children(":not(" + keepTag + ")").remove();
-        // Remove all duplicated ids in cloned table
-        result.find("*").andSelf().removeAttr('id');
+        // Remove table duplicated id
+        result.removeAttr('id');
         // Remove unwanted css properties
         result.css(
         {
-            "padding-top" : 0,
-            "padding-bottom" : 0,
-            "border-top" : 0,
-            "border-bottom" : 0,
-            "margin" : 0
+            paddingTop : 0,
+            paddingBottom : 0,
+            borderTop : 0,
+            borderBottom : 0,
+            margin : 0
         });
+        // Remove all duplicated ids in original thead/tfoot
+        table.children(keepTag).find("*").andSelf().removeAttr('id');
+        // Return duplicated table
         return result;
     }
 
@@ -45,10 +49,11 @@
         for ( var i in floatingList)
         {
             var floating = floatingList[i];
-            var tLimitPos = 0;
-            var moveToLimit = false;
+            var newPosition = "";
+            var forceUpdate = true;
             var cssProperties =
             {
+                position : "absolute",
                 top : "",
                 bottom : ""
             };
@@ -56,68 +61,88 @@
             if (floating.t[0].tagName == "THEAD")
             {
                 var tPos = $(window).scrollTop();
-                tLimitPos = floating.t.offset().top + floating.t.outerHeight()
+                var tOriginPos = floating.t.offset().top
+                    + floating.t.outerHeight() - floating.div.outerHeight(true);
+                var tOppositePos = floating.parent.offset().top
+                    + floating.parent.outerHeight()
                     - floating.div.outerHeight(true);
-                // thead is in its original position
-                if (tPos < tLimitPos)
-                    moveToLimit = true;
+
+                // thead is at its original position
+                if (tPos < tOriginPos)
+                {
+                    newPosition = "origin";
+                    cssProperties["top"] = tOriginPos;
+                }
+                // thead is at the bottom of the table
+                else if (tPos > tOppositePos)
+                {
+                    newPosition = "opposite";
+                    cssProperties["top"] = tOppositePos;
+                }
+                // thead is fixed on top of the browser
                 else
                 {
-                    tLimitPos = floating.parent.offset().top
-                        + floating.parent.outerHeight()
-                        - floating.div.outerHeight(true);
-                    if (tPos > tLimitPos)
-                        moveToLimit = true;
-                    else
+                    newPosition = "fix-top";
+                    if (fixedPosition)
+                    {
+                        forceUpdate = false;
+                        cssProperties["position"] = "fixed";
                         cssProperties["top"] = 0;
+                    }
+                    // Unsupported fixed position
+                    else
+                    {
+                        cssProperties["top"] = tPos;
+                    }
                 }
             }
             else if (floating.t[0].tagName == "TFOOT")
             {
                 var tPos = $(window).scrollTop() + $(window).height()
                     - floating.div.outerHeight(true);
-                tLimitPos = floating.t.offset().top;
-                // tfoot is in its original position
-                if (tPos > tLimitPos)
-                    moveToLimit = true;
+                var tOriginPos = floating.t.offset().top;
+                var tOppositePos = floating.parent.offset().top;
+
+                // tfoot is at its original position
+                if (tPos > tOriginPos)
+                {
+                    newPosition = "origin";
+                    cssProperties["top"] = tOriginPos;
+                }
+                // tfoot is at the top of the table
+                else if (tPos < tOppositePos)
+                {
+                    newPosition = "opposite";
+                    cssProperties["top"] = tOppositePos;
+                }
+                // tfoot is fixed on bottom of the browser
                 else
                 {
-                    tLimitPos = floating.parent.offset().top;
-                    if (tPos < tLimitPos)
-                        moveToLimit = true;
-                    else
+                    newPosition = "fix-btm";
+                    if (fixedPosition)
+                    {
+                        forceUpdate = false;
+                        cssProperties["position"] = "fixed";
                         cssProperties["bottom"] = 0;
-                }
-            }
-            // thead/tfoot is in its original position
-            if (moveToLimit)
-            {
-                if (floating.position != "absolute")
-                {
-                    floating.div.css($.extend(cssProperties,
+                    }
+                    // Unsupported fixed position
+                    else
                     {
-                        position : "absolute",
-                    }));
-                    floating.position = "absolute";
-                }
-                floating.div.css("top", tLimitPos);
-            }
-            // thead/tfoot is in the top/bottom of the window
-            else
-            {
-                if (floating.position != "fixed")
-                {
-                    floating.div.css($.extend(cssProperties,
-                    {
-                        position : "fixed"
-                    }));
-                    floating.position = "fixed";
+                        cssProperties["top"] = tPos;
+                    }
                 }
             }
 
+            // Update div CSS properties
+            if (forceUpdate || floating.position != newPosition)
+            {
+                floating.div.css(cssProperties);
+                floating.position = newPosition;
+            }
+
             // Move container horizontally
-            floating.container.css("margin-left",
-                floating.fitWith.offset().left - floating.div.offset().left);
+            floating.container.css("margin-left", floating.fitIn.offset().left
+                - floating.div.offset().left);
         }
     }
 
@@ -131,8 +156,8 @@
             var tClonedColumns = floating.clonedParent.children().children()
                 .children("th,td");
 
-            // Expand container div
-            floating.container.width(floating.fitWith.outerWidth());
+            // Expand container
+            floating.container.width(floating.fitIn.outerWidth());
 
             // Set cloned table width
             floating.clonedParent.width(floating.parent.outerWidth());
@@ -156,80 +181,65 @@
     $.fn.floatingHeadFoot = function(
         params)
     {
-
         // Setting up default parameters
         var localParams = $.extend(
         {
-            fitWith : null, // container alignment and width
-            windowScrollCallback : function()
-            {
-            },
-            windowResizeCallback : function()
-            {
-            }
+            fitIn : null, // container alignment and width
+            windowScrollCallback : null,
+            windowResizeCallback : null
         }, params);
 
+        // IE 6 detection
+        if ($.browser.msie && parseInt($.browser.version, 10) < 7)
+        {
+            fixedPosition = false;
+        }
+
+        var refresh = false;
         this.each(function()
         {
             // Define new floating thead/tfoot
             if ($(this).is("thead") || $(this).is("tfoot"))
             {
-                floatingList.push(
-                {
-                    refresh : true,
-                    t : $(this)
-                });
-            }
-        });
-
-        var refresh = false;
-        // Search for new floating thead/tfoot
-        for ( var i in floatingList)
-        {
-            var floating = floatingList[i];
-
-            // If new floating thead/tfoot
-            if (floating.refresh)
-            {
                 refresh = true;
-                floating.refresh = false;
+                var floating =
+                {
+                    t : $(this), // thead/tfoot
+                    parent : $(this).parent("table"), // Parent table
+                    fitIn : $(this), // fitIn
+                    position : "init", // Initial state
+                    div : $("<div>").appendTo($("body"))
+                };
 
-                // Store fitWith parameter
-                floating.fitWith = floating.t;
-                if (localParams.fitWith != null)
-                    floating.fitWith = localParams.fitWith;
-                // Set state
-                floating.position = "init";
+                // Store fitIn parameter
+                if (localParams.fitIn != null)
+                    floating.fitIn = localParams.fitIn;
 
-                // Create a div at the end of body
-                floating.div = $("<div>").appendTo($("body"));
                 // Create the container
                 floating.container = createContainer(
                     "floating_" + floating.t[0].tagName.toLowerCase()
                         + "_container").appendTo(floating.div);
-                ;
-
-                // Get parent table
-                floating.parent = floating.t.parent("table");
-
                 // Create a copy of the parent table
                 floating.clonedParent = cloneTable(floating.parent,
-                    floating.t[0].tagName);
+                    $(this)[0].tagName);
                 // Append cloned table to container
                 floating.container.append(floating.clonedParent);
 
                 // Hide original thead/tfoot
                 floating.t.css("visibility", "hidden");
+
+                // Store floating head/foot into floatingList
+                floatingList.push(floating);
             }
-        }
+        });
 
         if (refresh)
         {
-            // Resize new floating thead/tfoot columns
-            resizeHeadFoot();
-
             // Move new floating thead/tfoot container
             moveHeadFoot();
+
+            // Resize new floating thead/tfoot columns
+            resizeHeadFoot();
 
             // Window scroll callback
             $(window).scroll(function()
@@ -249,11 +259,11 @@
             $(window).resize(function()
             {
 
-                // Resize the thead/tfoot columns
-                resizeHeadFoot();
-
                 // Move the thead/tfoot containers
                 moveHeadFoot();
+
+                // Resize the thead/tfoot columns
+                resizeHeadFoot();
 
                 // User callback
                 if (typeof localParams.windowResizeCallback == "function")
