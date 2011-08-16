@@ -213,7 +213,7 @@
                 };
 
                 // Store fitIn parameter
-                if (localParams.fitIn != null)
+                if (localParams.fitIn != null && localParams.fitIn.length)
                     floating.fitIn = localParams.fitIn;
 
                 // Create the container
