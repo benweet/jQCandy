@@ -62,10 +62,11 @@
             {
                 var tPos = $(window).scrollTop();
                 var tOriginPos = floating.t.offset().top
-                    + floating.t.outerHeight() - floating.div.outerHeight(true);
+                    + floating.t.outerHeight()
+                    - floating.container.outerHeight(true);
                 var tOppositePos = floating.parent.offset().top
                     + floating.parent.outerHeight()
-                    - floating.div.outerHeight(true);
+                    - floating.container.outerHeight(true);
 
                 // thead is at its original position
                 if (tPos < tOriginPos)
@@ -99,7 +100,7 @@
             else if (floating.t[0].tagName == "TFOOT")
             {
                 var tPos = $(window).scrollTop() + $(window).height()
-                    - floating.div.outerHeight(true);
+                    - floating.container.outerHeight(true);
                 var tOriginPos = floating.t.offset().top;
                 var tOppositePos = floating.parent.offset().top;
 
@@ -244,7 +245,6 @@
             // Window scroll callback
             $(window).scroll(function()
             {
-
                 // Move the thead/tfoot containers
                 moveHeadFoot();
 
@@ -258,7 +258,6 @@
             // Window resize callback
             $(window).resize(function()
             {
-
                 // Move the thead/tfoot containers
                 moveHeadFoot();
 

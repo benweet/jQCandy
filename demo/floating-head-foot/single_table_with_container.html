@@ -10,7 +10,7 @@
 <script type="text/javascript">
     $(document).ready(function()
     {
-        $("thead,tfoot").floatingHeadFoot();
+        $("thead,tfoot").floatingHeadFoot({fitIn: $("body")});
     });
 </script>
 <style type="text/css">
@@ -25,10 +25,6 @@ table {
 	margin: 0 20px 50px
 }
 
-thead,tfoot {
-	background-color: #d4e0eb;
-}
-
 th {
 	font-weight: bolder;
 	padding: 10px;
@@ -38,6 +34,13 @@ th {
 td {
 	padding: 0 10px;
 }
+
+.floating_thead_container, .floating_tfoot_container {
+	background-color: #d4e0eb;
+	border: 1px solid #c4cfd9;
+	margin: 5px;
+}
+
 </style>
 </head>
 
