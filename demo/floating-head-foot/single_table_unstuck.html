@@ -1,0 +1,779 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Floating head foot example</title>
+<script type="text/javascript"
+	src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script type="text/javascript" src="../../libs/jquery.jqc-floating-head-foot.js"></script>
+<script type="text/javascript">
+    $(document).ready(function()
+    {
+        $("thead,tfoot").floatingHeadFoot({stickToTable: false});
+    });
+</script>
+<style type="text/css">
+html,body,div {
+	font-family: sans-serif;
+	margin: 0;
+	padding: 0;
+}
+
+table {
+	border-collapse: collapse;
+	margin: 0 20px 50px
+}
+
+thead,tfoot {
+	background-color: #d4e0eb;
+}
+
+th {
+	font-weight: bolder;
+	padding: 10px;
+	text-align: left;
+}
+
+td {
+	padding: 0 10px;
+}
+</style>
+</head>
+
+<body>
+	<h1>Liste des préfectures de France</h1>
+	<table>
+		<thead>
+			<tr>
+				<th>Numéro</th>
+				<th>Département</th>
+				<th>Chef lieu</th>
+				<th>Population (2006)</th>
+				<th>Sous-préfectures</th>
+			</tr>
+		</thead>
+		<tfoot>
+			<tr>
+				<th>Numéro</th>
+				<th>Département</th>
+				<th>Chef lieu</th>
+				<th>Population (2006)</th>
+				<th>Sous-préfectures</th>
+			</tr>
+		</tfoot>
+		<tbody>
+			<tr>
+				<td>01</td>
+				<td>Ain</td>
+				<td>Bourg-en-Bresse</td>
+				<td>40 300</td>
+				<td>Belley, Gex, Nantua</td>
+			</tr>
+			<tr>
+				<td>02</td>
+				<td>Aisne</td>
+				<td>Laon</td>
+				<td>26 500</td>
+				<td>Château-Thierry, Saint-Quentin, Soissons, Vervins</td>
+			</tr>
+			<tr>
+				<td>03</td>
+				<td>Allier</td>
+				<td>Moulins</td>
+				<td>23 700</td>
+				<td>Montluçon, Vichy</td>
+			</tr>
+			<tr>
+				<td>04</td>
+				<td>Alpes-de-Haute-Provence</td>
+				<td>Digne-les-Bains</td>
+				<td>17 600</td>
+				<td>Barcelonnette, Castellane, Forcalquier</td>
+			</tr>
+			<tr>
+				<td>05</td>
+				<td>Hautes-Alpes</td>
+				<td>Gap</td>
+				<td>37 200</td>
+				<td>Briançon</td>
+			</tr>
+			<tr>
+				<td>06</td>
+				<td>Alpes-Maritimes</td>
+				<td>Nice</td>
+				<td>346 900</td>
+				<td>Grasse</td>
+			</tr>
+			<tr>
+				<td>07</td>
+				<td>Ardèche</td>
+				<td>Privas</td>
+				<td>8 6462</td>
+				<td>Largentière, Tournon-sur-Rhône</td>
+			</tr>
+			<tr>
+				<td>08</td>
+				<td>Ardennes</td>
+				<td>Charleville-Mézières</td>
+				<td>51 300</td>
+				<td>Rethel, Sedan, Vouziers</td>
+			</tr>
+			<tr>
+				<td>09</td>
+				<td>Ariège</td>
+				<td>Foix</td>
+				<td>9 6582</td>
+				<td>Pamiers, Saint-Girons</td>
+			</tr>
+			<tr>
+				<td>10</td>
+				<td>Aube</td>
+				<td>Troyes</td>
+				<td>60 400</td>
+				<td>Bar-sur-Aube, Nogent-sur-Seine</td>
+			</tr>
+			<tr>
+				<td>11</td>
+				<td>Aude</td>
+				<td>Carcassonne</td>
+				<td>45 500</td>
+				<td>Limoux, Narbonne</td>
+			</tr>
+			<tr>
+				<td>12</td>
+				<td>Aveyron</td>
+				<td>Rodez</td>
+				<td>27 000</td>
+				<td>Millau, Villefranche-de-Rouergue</td>
+			</tr>
+			<tr>
+				<td>13</td>
+				<td>Bouches-du-Rhône</td>
+				<td>Marseille</td>
+				<td>826 700</td>
+				<td>Aix-en-Provence, Arles, Istres</td>
+			</tr>
+			<tr>
+				<td>14</td>
+				<td>Calvados</td>
+				<td>Caen</td>
+				<td>108 900</td>
+				<td>Bayeux, Lisieux, Vire</td>
+			</tr>
+			<tr>
+				<td>15</td>
+				<td>Cantal</td>
+				<td>Aurillac</td>
+				<td>29 700</td>
+				<td>Mauriac, Saint-Flour</td>
+			</tr>
+			<tr>
+				<td>16</td>
+				<td>Charente</td>
+				<td>Angoulême</td>
+				<td>41 700</td>
+				<td>Cognac, Confolens</td>
+			</tr>
+			<tr>
+				<td>17</td>
+				<td>Charente-Maritime</td>
+				<td>La Rochelle</td>
+				<td>77 300</td>
+				<td>Jonzac, Rochefort, Saintes, Saint-Jean-d'Angély</td>
+			</tr>
+			<tr>
+				<td>18</td>
+				<td>Cher</td>
+				<td>Bourges</td>
+				<td>70 800</td>
+				<td>Saint-Amand-Montrond, Vierzon</td>
+			</tr>
+			<tr>
+				<td>19</td>
+				<td>Corrèze</td>
+				<td>Tulle</td>
+				<td>15 700</td>
+				<td>Brive-la-Gaillarde, Ussel</td>
+			</tr>
+			<tr>
+				<td>2A</td>
+				<td>Corse-du-Sud</td>
+				<td>Ajaccio</td>
+				<td>52 8802</td>
+				<td>Sartène</td>
+			</tr>
+			<tr>
+				<td>2B</td>
+				<td>Haute-Corse</td>
+				<td>Bastia</td>
+				<td>42 900</td>
+				<td>Calvi, Corte</td>
+			</tr>
+			<tr>
+				<td>21</td>
+				<td>Côte-d'Or</td>
+				<td>Dijon</td>
+				<td>150 800</td>
+				<td>Beaune, Montbard</td>
+			</tr>
+			<tr>
+				<td>22</td>
+				<td>Côtes-d'Armor</td>
+				<td>Saint-Brieuc</td>
+				<td>46 700</td>
+				<td>Dinan, Guingamp, Lannion</td>
+			</tr>
+			<tr>
+				<td>23</td>
+				<td>Creuse</td>
+				<td>Guéret</td>
+				<td>15 102</td>
+				<td>Aubusson</td>
+			</tr>
+			<tr>
+				<td>24</td>
+				<td>Dordogne</td>
+				<td>Périgueux</td>
+				<td>29 600</td>
+				<td>Bergerac, Nontron, Sarlat-la-Canéda</td>
+			</tr>
+			<tr>
+				<td>25</td>
+				<td>Doubs</td>
+				<td>Besançon</td>
+				<td>116 100</td>
+				<td>Montbéliard, Pontarlier</td>
+			</tr>
+			<tr>
+				<td>26</td>
+				<td>Drôme</td>
+				<td>Valence</td>
+				<td>65 263</td>
+				<td>Die, Nyons</td>
+			</tr>
+			<tr>
+				<td>27</td>
+				<td>Eure</td>
+				<td>Évreux</td>
+				<td>50 300</td>
+				<td>Les Andelys, Bernay</td>
+			</tr>
+			<tr>
+				<td>28</td>
+				<td>Eure-et-Loir</td>
+				<td>Chartres</td>
+				<td>40 000</td>
+				<td>Châteaudun, Dreux, Nogent-le-Rotrou</td>
+			</tr>
+			<tr>
+				<td>29</td>
+				<td>Finistère</td>
+				<td>Quimper</td>
+				<td>64 900</td>
+				<td>Brest, Châteaulin, Morlaix</td>
+			</tr>
+			<tr>
+				<td>30</td>
+				<td>Gard</td>
+				<td>Nîmes</td>
+				<td>144 000</td>
+				<td>Alès, Le Vigan</td>
+			</tr>
+			<tr>
+				<td>31</td>
+				<td>Haute-Garonne</td>
+				<td>Toulouse</td>
+				<td>437 100</td>
+				<td>Muret, Saint-Gaudens</td>
+			</tr>
+			<tr>
+				<td>32</td>
+				<td>Gers</td>
+				<td>Auch</td>
+				<td>21 700</td>
+				<td>Condom, Mirande</td>
+			</tr>
+			<tr>
+				<td>33</td>
+				<td>Gironde</td>
+				<td>Bordeaux</td>
+				<td>229 500</td>
+				<td>Arcachon, Blaye, Langon, Lesparre-Médoc, Libourne</td>
+			</tr>
+			<tr>
+				<td>34</td>
+				<td>Hérault</td>
+				<td>Montpellier</td>
+				<td>248 000</td>
+				<td>Béziers, Lodève</td>
+			</tr>
+			<tr>
+				<td>35</td>
+				<td>Ille-et-Vilaine</td>
+				<td>Rennes</td>
+				<td>210 500</td>
+				<td>Fougères, Redon, Saint-Malo</td>
+			</tr>
+			<tr>
+				<td>36</td>
+				<td>Indre</td>
+				<td>Châteauroux</td>
+				<td>47 500</td>
+				<td>Le Blanc, La Châtre, Issoudun</td>
+			</tr>
+			<tr>
+				<td>37</td>
+				<td>Indre-et-Loire</td>
+				<td>Tours</td>
+				<td>136 400</td>
+				<td>Chinon, Loches</td>
+			</tr>
+			<tr>
+				<td>38</td>
+				<td>Isère</td>
+				<td>Grenoble</td>
+				<td>155 100</td>
+				<td>La Tour-du-Pin, Vienne</td>
+			</tr>
+			<tr>
+				<td>39</td>
+				<td>Jura</td>
+				<td>Lons-le-Saunier</td>
+				<td>17 900</td>
+				<td>Dole, Saint-Claude</td>
+			</tr>
+			<tr>
+				<td>40</td>
+				<td>Landes</td>
+				<td>Mont-de-Marsan</td>
+				<td>30 700</td>
+				<td>Dax</td>
+			</tr>
+			<tr>
+				<td>41</td>
+				<td>Loir-et-Cher</td>
+				<td>Blois</td>
+				<td>47 900</td>
+				<td>Romorantin-Lanthenay, Vendôme</td>
+			</tr>
+			<tr>
+				<td>42</td>
+				<td>Loire</td>
+				<td>Saint-Étienne</td>
+				<td>175 500</td>
+				<td>Montbrison, Roanne</td>
+			</tr>
+			<tr>
+				<td>43</td>
+				<td>Haute-Loire</td>
+				<td>Le Puy-en-Velay</td>
+				<td>19 300</td>
+				<td>Brioude, Yssingeaux</td>
+			</tr>
+			<tr>
+				<td>44</td>
+				<td>Loire-Atlantique</td>
+				<td>Nantes</td>
+				<td>281 800</td>
+				<td>Ancenis, Châteaubriant, Saint-Nazaire</td>
+			</tr>
+			<tr>
+				<td>45</td>
+				<td>Loiret</td>
+				<td>Orléans</td>
+				<td>113 200</td>
+				<td>Montargis, Pithiviers</td>
+			</tr>
+			<tr>
+				<td>46</td>
+				<td>Lot</td>
+				<td>Cahors</td>
+				<td>20 300</td>
+				<td>Figeac, Gourdon</td>
+			</tr>
+			<tr>
+				<td>47</td>
+				<td>Lot-et-Garonne</td>
+				<td>Agen</td>
+				<td>33 600</td>
+				<td>Marmande, Nérac, Villeneuve-sur-Lot</td>
+			</tr>
+			<tr>
+				<td>48</td>
+				<td>Lozère</td>
+				<td>Mende</td>
+				<td>12 600</td>
+				<td>Florac</td>
+			</tr>
+			<tr>
+				<td>49</td>
+				<td>Maine-et-Loire</td>
+				<td>Angers</td>
+				<td>153 000</td>
+				<td>Cholet, Saumur, Segré</td>
+			</tr>
+			<tr>
+				<td>50</td>
+				<td>Manche</td>
+				<td>Saint-Lô</td>
+				<td>19 600</td>
+				<td>Avranches, Cherbourg-Octeville, Coutances</td>
+			</tr>
+			<tr>
+				<td>51</td>
+				<td>Marne</td>
+				<td>Châlons-en-Champagne</td>
+				<td>46 300</td>
+				<td>Épernay, Reims, Sainte-Menehould, Vitry-le-François</td>
+			</tr>
+			<tr>
+				<td>52</td>
+				<td>Haute-Marne</td>
+				<td>Chaumont</td>
+				<td>24 200</td>
+				<td>Langres, Saint-Dizier</td>
+			</tr>
+			<tr>
+				<td>53</td>
+				<td>Mayenne</td>
+				<td>Laval</td>
+				<td>51 000</td>
+				<td>Château-Gontier, Mayenne</td>
+			</tr>
+			<tr>
+				<td>54</td>
+				<td>Meurthe-et-Moselle</td>
+				<td>Nancy</td>
+				<td>106 300</td>
+				<td>Briey, Lunéville, Toul</td>
+			</tr>
+			<tr>
+				<td>55</td>
+				<td>Meuse</td>
+				<td>Bar-le-Duc</td>
+				<td>15 800</td>
+				<td>Commercy, Verdun</td>
+			</tr>
+			<tr>
+				<td>56</td>
+				<td>Morbihan</td>
+				<td>Vannes</td>
+				<td>53 700</td>
+				<td>Lorient, Pontivy</td>
+			</tr>
+			<tr>
+				<td>57</td>
+				<td>Moselle</td>
+				<td>Metz</td>
+				<td>124 200</td>
+				<td>Boulay-Moselle, Château-Salins, Forbach, Sarrebourg,
+					Sarreguemines, Thionville</td>
+			</tr>
+			<tr>
+				<td>58</td>
+				<td>Nièvre</td>
+				<td>Nevers</td>
+				<td>38 200</td>
+				<td>Château-Chinon (Ville), Clamecy, Cosne-Cours-sur-Loire</td>
+			</tr>
+			<tr>
+				<td>59</td>
+				<td>Nord</td>
+				<td>Lille</td>
+				<td>224 900</td>
+				<td>Avesnes-sur-Helpe, Cambrai, Douai, Dunkerque, Valenciennes</td>
+			</tr>
+			<tr>
+				<td>60</td>
+				<td>Oise</td>
+				<td>Beauvais</td>
+				<td>55 100</td>
+				<td>Clermont, Compiègne, Senlis</td>
+			</tr>
+			<tr>
+				<td>61</td>
+				<td>Orne</td>
+				<td>Alençon</td>
+				<td>28 400</td>
+				<td>Argentan, Mortagne-au-Perche</td>
+			</tr>
+			<tr>
+				<td>62</td>
+				<td>Pas-de-Calais</td>
+				<td>Arras</td>
+				<td>44 283</td>
+				<td>Béthune, Boulogne-sur-Mer, Calais, Lens, Montreuil,
+					Saint-Omer</td>
+			</tr>
+			<tr>
+				<td>63</td>
+				<td>Puy-de-Dôme</td>
+				<td>Clermont-Ferrand</td>
+				<td>139 300</td>
+				<td>Ambert, Issoire, Riom, Thiers</td>
+			</tr>
+			<tr>
+				<td>64</td>
+				<td>Pyrénées-Atlantiques</td>
+				<td>Pau</td>
+				<td>83 000</td>
+				<td>Bayonne, Oloron-Sainte-Marie</td>
+			</tr>
+			<tr>
+				<td>65</td>
+				<td>Hautes-Pyrénées</td>
+				<td>Tarbes</td>
+				<td>45 800</td>
+				<td>Argelès-Gazost, Bagnères-de-Bigorre</td>
+			</tr>
+			<tr>
+				<td>66</td>
+				<td>Pyrénées-Orientales</td>
+				<td>Perpignan</td>
+				<td>115 000</td>
+				<td>Céret, Prades</td>
+			</tr>
+			<tr>
+				<td>67</td>
+				<td>Bas-Rhin</td>
+				<td>Strasbourg</td>
+				<td>272 500</td>
+				<td>Haguenau, Molsheim, Saverne, Sélestat, Wissembourg</td>
+			</tr>
+			<tr>
+				<td>68</td>
+				<td>Haut-Rhin</td>
+				<td>Colmar</td>
+				<td>65 300</td>
+				<td>Altkirch, Guebwiller, Mulhouse, Ribeauvillé, Thann</td>
+			</tr>
+			<tr>
+				<td>69</td>
+				<td>Rhône</td>
+				<td>Lyon</td>
+				<td>467 400</td>
+				<td>Villefranche-sur-Saône</td>
+			</tr>
+			<tr>
+				<td>70</td>
+				<td>Haute-Saône</td>
+				<td>Vesoul</td>
+				<td>16 200</td>
+				<td>Lure</td>
+			</tr>
+			<tr>
+				<td>71</td>
+				<td>Saône-et-Loire</td>
+				<td>Mâcon</td>
+				<td>34 100</td>
+				<td>Autun, Chalon-sur-Saône, Charolles, Louhans</td>
+			</tr>
+			<tr>
+				<td>72</td>
+				<td>Sarthe</td>
+				<td>Le Mans</td>
+				<td>143 800</td>
+				<td>La Flèche, Mamers</td>
+			</tr>
+			<tr>
+				<td>73</td>
+				<td>Savoie</td>
+				<td>Chambéry</td>
+				<td>57 800</td>
+				<td>Albertville, Saint-Jean-de-Maurienne</td>
+			</tr>
+			<tr>
+				<td>74</td>
+				<td>Haute-Savoie</td>
+				<td>Annecy</td>
+				<td>51 000</td>
+				<td>Bonneville, Saint-Julien-en-Genevois, Thonon-les-Bains</td>
+			</tr>
+			<tr>
+				<td>75</td>
+				<td>Paris</td>
+				<td>Paris</td>
+				<td>2 166 200</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>76</td>
+				<td>Seine-Maritime</td>
+				<td>Rouen</td>
+				<td>108 300</td>
+				<td>Dieppe, Le Havre</td>
+			</tr>
+			<tr>
+				<td>77</td>
+				<td>Seine-et-Marne</td>
+				<td>Melun</td>
+				<td>38 000</td>
+				<td>Fontainebleau, Meaux, Provins, Torcy</td>
+			</tr>
+			<tr>
+				<td>78</td>
+				<td>Yvelines</td>
+				<td>Versailles</td>
+				<td>87 100</td>
+				<td>Mantes-la-Jolie, Rambouillet, Saint-Germain-en-Laye</td>
+			</tr>
+			<tr>
+				<td>79</td>
+				<td>Deux-Sèvres</td>
+				<td>Niort</td>
+				<td>57 900</td>
+				<td>Bressuire, Parthenay</td>
+			</tr>
+			<tr>
+				<td>80</td>
+				<td>Somme</td>
+				<td>Amiens</td>
+				<td>136 600</td>
+				<td>Abbeville, Montdidier, Péronne</td>
+			</tr>
+			<tr>
+				<td>81</td>
+				<td>Tarn</td>
+				<td>Albi</td>
+				<td>51 302</td>
+				<td>Castres</td>
+			</tr>
+			<tr>
+				<td>82</td>
+				<td>Tarn-et-Garonne</td>
+				<td>Montauban</td>
+				<td>53 200</td>
+				<td>Castelsarrasin</td>
+			</tr>
+			<tr>
+				<td>83</td>
+				<td>Var</td>
+				<td>Toulon</td>
+				<td>167 400</td>
+				<td>Brignoles, Draguignan</td>
+			</tr>
+			<tr>
+				<td>84</td>
+				<td>Vaucluse</td>
+				<td>Avignon</td>
+				<td>90 800</td>
+				<td>Apt, Carpentras</td>
+			</tr>
+			<tr>
+				<td>85</td>
+				<td>Vendée</td>
+				<td>La Roche-sur-Yon</td>
+				<td>54 565</td>
+				<td>Fontenay-le-Comte, Les Sables-d'Olonne</td>
+			</tr>
+			<tr>
+				<td>86</td>
+				<td>Vienne</td>
+				<td>Poitiers</td>
+				<td>89 200</td>
+				<td>Châtellerault, Montmorillon</td>
+			</tr>
+			<tr>
+				<td>87</td>
+				<td>Haute-Vienne</td>
+				<td>Limoges</td>
+				<td>135 100</td>
+				<td>Bellac, Rochechouart</td>
+			</tr>
+			<tr>
+				<td>88</td>
+				<td>Vosges</td>
+				<td>Épinal</td>
+				<td>34 700</td>
+				<td>Neufchâteau, Saint-Dié-des-Vosges</td>
+			</tr>
+			<tr>
+				<td>89</td>
+				<td>Yonne</td>
+				<td>Auxerre</td>
+				<td>37 100</td>
+				<td>Avallon, Sens</td>
+			</tr>
+			<tr>
+				<td>90</td>
+				<td>Territoire - de - Belfort</td>
+				<td>Belfort</td>
+				<td>50 700</td>
+			</tr>
+			<tr>
+				<td>91</td>
+				<td>Essonne</td>
+				<td>Évry</td>
+				<td>52 600</td>
+				<td>Étampes, Palaiseau</td>
+			</tr>
+			<tr>
+				<td>92</td>
+				<td>Hauts-de-Seine</td>
+				<td>Nanterre</td>
+				<td>87 800</td>
+				<td>Antony, Boulogne-Billancourt</td>
+			</tr>
+			<tr>
+				<td>93</td>
+				<td>Seine-Saint-Denis</td>
+				<td>Bobigny</td>
+				<td>46 600</td>
+				<td>Le Raincy, Saint-Denis</td>
+			</tr>
+			<tr>
+				<td>94</td>
+				<td>Val-de-Marne</td>
+				<td>Créteil</td>
+				<td>89 000</td>
+				<td>L'Haÿ-les-Roses, Nogent-sur-Marne</td>
+			</tr>
+			<tr>
+				<td>95</td>
+				<td>Val-d'Oise</td>
+				<td>Cergy</td>
+				<td>57 600</td>
+				<td>Argenteuil, Sarcelles, Pontoise (Chef-lieu)</td>
+			</tr>
+			<tr>
+				<td>971</td>
+				<td>Guadeloupe</td>
+				<td>Basse-Terre</td>
+				<td>12 4102</td>
+				<td>Pointe-à-Pitre</td>
+			</tr>
+			<tr>
+				<td>972</td>
+				<td>Martinique</td>
+				<td>Fort-de-France</td>
+				<td>94 0492</td>
+				<td>Le Marin, Saint-Pierre, La Trinité</td>
+			</tr>
+			<tr>
+				<td>973</td>
+				<td>Guyane</td>
+				<td>Cayenne</td>
+				<td>64 2972</td>
+				<td>Saint-Laurent-du-Maroni</td>
+			</tr>
+			<tr>
+				<td>974</td>
+				<td>Réunion</td>
+				<td>Saint-Denis</td>
+				<td>138 600</td>
+				<td>Saint-Benoît, Saint-Paul, Saint-Pierre</td>
+			</tr>
+		</tbody>
+	</table>
+	<p>
+		<small> <a
+			href="http://creativecommons.org/licenses/by-sa/3.0/deed.fr">Contenu
+				soumis à la licence CC-BY-SA</a>. Source : Article <em><a
+				href="http://fr.wikipedia.org/wiki/Liste_des_pr%C3%A9fectures_de_France">Liste
+					des préfectures de France</a> </em> de <a href="http://fr.wikipedia.org/">Wikipédia
+				en français</a> ( <a
+			href="http://fr.wikipedia.org/w/index.php?title=Liste_des_pr%C3%A9fectures_de_France&action=history">auteurs</a>)</small>
+	</p>
+</body>
+</html>

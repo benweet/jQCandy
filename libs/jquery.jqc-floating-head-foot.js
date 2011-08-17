@@ -60,7 +60,7 @@
 
             if (floating.t[0].tagName == "THEAD")
             {
-                var tPos = $(window).scrollTop();
+                var tPos = $(window).scrollTop() + floating.topOffset;
                 var tOriginPos = floating.t.offset().top
                     + floating.t.outerHeight()
                     - floating.container.outerHeight(true);
@@ -68,14 +68,14 @@
                     + floating.parent.outerHeight()
                     - floating.container.outerHeight(true);
 
-                // thead is at its original position
-                if (tPos < tOriginPos)
+                // thead is sticked to its origin position
+                if (floating.stickToTable && tPos < tOriginPos)
                 {
                     newPosition = "origin";
                     cssProperties["top"] = tOriginPos;
                 }
-                // thead is at the bottom of the table
-                else if (tPos > tOppositePos)
+                // thead is sticked to the bottom of the table
+                else if (floating.stickToTable && tPos > tOppositePos)
                 {
                     newPosition = "opposite";
                     cssProperties["top"] = tOppositePos;
@@ -88,7 +88,7 @@
                     {
                         forceUpdate = false;
                         cssProperties["position"] = "fixed";
-                        cssProperties["top"] = 0;
+                        cssProperties["top"] = floating.topOffset;
                     }
                     // Unsupported fixed position
                     else
@@ -100,18 +100,19 @@
             else if (floating.t[0].tagName == "TFOOT")
             {
                 var tPos = $(window).scrollTop() + $(window).height()
-                    - floating.container.outerHeight(true);
+                    - floating.container.outerHeight(true)
+                    - floating.bottomOffset;
                 var tOriginPos = floating.t.offset().top;
                 var tOppositePos = floating.parent.offset().top;
 
-                // tfoot is at its original position
-                if (tPos > tOriginPos)
+                // tfoot is sticked to its origin position
+                if (floating.stickToTable && tPos > tOriginPos)
                 {
                     newPosition = "origin";
                     cssProperties["top"] = tOriginPos;
                 }
-                // tfoot is at the top of the table
-                else if (tPos < tOppositePos)
+                // tfoot is sticked to the top of the table
+                else if (floating.stickToTable && tPos < tOppositePos)
                 {
                     newPosition = "opposite";
                     cssProperties["top"] = tOppositePos;
@@ -124,7 +125,7 @@
                     {
                         forceUpdate = false;
                         cssProperties["position"] = "fixed";
-                        cssProperties["bottom"] = 0;
+                        cssProperties["bottom"] = floating.bottomOffset;
                     }
                     // Unsupported fixed position
                     else
@@ -186,6 +187,9 @@
         var localParams = $.extend(
         {
             fitIn : null, // container alignment and width
+            stickToTable : true,
+            topOffset : 0,
+            bottomOffset : 0,
             windowScrollCallback : null,
             windowResizeCallback : null
         }, params);
@@ -203,13 +207,17 @@
             if ($(this).is("thead") || $(this).is("tfoot"))
             {
                 refresh = true;
+                // Initialize structure
                 var floating =
                 {
                     t : $(this), // thead/tfoot
                     parent : $(this).parent("table"), // Parent table
-                    fitIn : $(this), // fitIn
                     position : "init", // Initial state
-                    div : $("<div>").appendTo($("body"))
+                    div : $("<div>").appendTo($("body")),
+                    fitIn : $(this),
+                    stickToTable : localParams.stickToTable,
+                    topOffset : localParams.topOffset,
+                    bottomOffset : localParams.bottomOffset
                 };
 
                 // Store fitIn parameter
